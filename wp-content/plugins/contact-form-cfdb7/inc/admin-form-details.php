@@ -38,7 +38,9 @@ class CFdb7_Form_Details
             <div id="welcome-panel" class="welcome-panel">
                 <div class="welcome-panel-content">
                     <div class="welcome-panel-column-container">
+                        <?php do_action('cfdb7_before_formdetails_title',$this->form_post_id ); ?>
                         <h3><?php echo get_the_title( $this->form_post_id ); ?></h3>
+                        <?php do_action('cfdb7_after_formdetails_title', $this->form_post_id ); ?>
                         <p></span><?php echo $results[0]->form_date; ?></p>
                         <?php $form_data  = unserialize( $results[0]->form_value );
 
@@ -85,7 +87,8 @@ class CFdb7_Form_Details
                 </div>
             </div>
         </div>
-        <?php 
-    }
+        <?php
+        do_action('cfdb7_after_formdetails', $this->form_post_id ); 
+    }  
 
 }

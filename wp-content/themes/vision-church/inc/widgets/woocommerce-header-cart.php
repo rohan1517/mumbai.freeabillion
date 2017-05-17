@@ -58,7 +58,7 @@
 add_action( 'widgets_init', create_function( '', 'register_widget( "Woocommerce_Header_Cart" );' ) );
 ?>
 <?php 
-add_filter('add_to_cart_fragments', 'woocommerce_header_add_to_cart_fragment');
+add_filter('woocommerce_add_to_cart_fragments', 'woocommerce_header_add_to_cart_fragment');
 function woocommerce_header_add_to_cart_fragment( $fragments ) {
 	global $woocommerce;
 	ob_start();	?>

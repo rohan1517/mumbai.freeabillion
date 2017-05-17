@@ -18,23 +18,12 @@
 <section class="container page-content" ><hr class="vertical-space2">
 <hr class="vertical-space3">
 <?php
-if ($sidebar == 'left' || $sidebar == 'both'){?>
-	<aside class="col-md-3 sidebar leftside">
-		<?php dynamic_sidebar( 'Left Sidebar' ); ?>
-	</aside>
-<?php }
-if ($sidebar == 'both')
-	$class='col-md-6 cntt-w sermons-grid';
-elseif ($sidebar == 'right' || $sidebar == 'left')
-	$class='col-md-9 cntt-w sermons-grid';
-else // none sidebar
-	$class='col-md-12 omega sermons-grid';	
-echo '<section class="'. esc_attr( $class ) .'">';
+echo '<section class="row omega sermons-grid">';
 if(have_posts()):
-		$count= 1 ;
 	while( have_posts() ): the_post();
 		//terms
 		$post_id = get_the_ID();
+
 		$terms = get_the_terms( $post_id , 'sermon_speaker' );
 		if(is_array($terms)){
 			$sermon_speaker= array();
@@ -42,6 +31,7 @@ if(have_posts()):
 				$sermon_speaker[] = $term->slug;
 			}
 		}else $sermon_speaker=array();
+
 		$terms = get_the_terms(get_the_id(), 'sermon_speaker' );
 		$terms_slug_str = '';
 		if ($terms && ! is_wp_error($terms)) :
@@ -52,7 +42,7 @@ if(have_posts()):
 		$terms_slug_str = implode( ", ", $term_slugs_arr);
 		endif;
 
-			//cats
+		//cats
 		$cats = get_the_terms( $post_id , 'sermon_category' );
 		if(is_array($cats)){
 			$sermon_category = array();
@@ -79,7 +69,15 @@ if(have_posts()):
 		$title = get_the_title();
 		$permalink = get_the_permalink();
 		$desc = $category.$sep.$speaker;
-		$image = get_the_image( array( 'meta_key' => array( 'thumbnail', 'thumbnail' ), 'size' => 'sermons-grid','echo'=>false, ) );
+		$thumbnail_url = get_the_post_thumbnail_url();
+		if( !empty( $thumbnail_url ) ) {
+			// if main class not exist get it
+			if ( !class_exists( 'Wn_Img_Maniuplate' ) ) {
+				require_once WEBNUS_CORE_DIR .'shortcodes/classes/class_webnus_manuplate.php';
+			}
+			$image = new Wn_Img_Maniuplate; // instance from settor class
+			$thumbnail_url = $image->m_image( $thumbnail_url , '420' , '230' ); // set required and get result
+		}
 
 		global $sermon_meta;
 		$sermon_video			= rwmb_meta( 'vision_church_sermon_video' );
@@ -103,14 +101,11 @@ if(have_posts()):
 	$sermon_read ='<a href="'.$permalink.'" target="_self"><i class="pe-7s-notebook"></i><span class="media_label">'.esc_html__('READ MORE','vision-church').'</a>';
 	$download_file = '<a href="'.$sermon_attachment.'" class="button theme-skin larg " target="_self"><span><i class="pe-7s-cloud-download"></i>'.esc_html__('DOWNLOAD','vision-church').'</span></a>';
 
-	$image = get_the_image( array( 'meta_key' => array( 'thumbnail', 'thumbnail' ), 'size' => 'sermons-grid','echo'=>false, ) );	
-
-
 	$download_file = '<a href="'.$sermon_attachment.'" target="_self" class="wn-data-tooltip" data-name="' . esc_html__( 'DOWNLOAD', 'vision-church' ) . '"><i class="pe-7s-cloud-download"></i></a>';
 
 	$sermons_meta_grid =
 	'<div class="media-links">
-	<a href="'.$sermon_video.'" class="fancybox-media wn-data-tooltip" target="_self" data-name="' . esc_html__( 'WHATCH', 'vision-church' ) . '"><i class="pe-7s-play"></i></a>
+	<a href="'.$sermon_video.'" class="fancybox-media wn-data-tooltip" target="_self" data-name="' . esc_html__( 'WATCH', 'vision-church' ) . '"><i class="pe-7s-play"></i></a>
 	<a href="#w-audio-'.$post_id.'" class="inlinelb wn-data-tooltip" target="_self" data-name="' . esc_html__( 'LISTEN', 'vision-church' ) . '"><i class="pe-7s-headphones"></i></a>
 	<div style="display:none">
 		<div class="w-audio w-audio-'.$post_id.'">
@@ -123,7 +118,13 @@ if(have_posts()):
 	echo'
 	<div class="col-md-4">
 		<div class="sermon-grid-item">
-			<div class="sermons-grid-wrap">
+			<div class="sermons-grid-wrap">';
+			if ( $thumbnail_url ){
+				echo '<div class="sermon-grid-thumbnail">
+					<a href="'.$permalink.'"><img src="'. $thumbnail_url .'" alt="'.$title.'"></a>
+				</div>';
+			}
+			echo '
 				<div class="sermon-grid-header">
 					<h4><a href="'.$permalink.'">'.$title.'</a></h4>
 					<div class="sermon-grid-cat">' .$cats_slug_str. '</div>
@@ -136,8 +137,6 @@ if(have_posts()):
 			</div>
 		</div>
 	</div>';
-
-	$count++;
 endwhile;
 else:
 	get_template_part('blogloop-none');
@@ -151,12 +150,6 @@ endif;
 } ?>
 <hr class="vertical-space5">
 </section>
-
-<?php if ($sidebar == 'right' || $sidebar == 'both'){?>
-	<aside class="col-md-3 sidebar">
-		<?php dynamic_sidebar( 'Right Sidebar' ); ?>
-	</aside>
-<?php } ?>
 
 </section>
 <?php get_footer(); ?>

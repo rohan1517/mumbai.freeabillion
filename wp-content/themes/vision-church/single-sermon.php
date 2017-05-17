@@ -21,36 +21,52 @@ if($vision_church_options['webnus_singlesermon_sidebar'] == 'left'){ ?>
 <?php vision_church_setViews(get_the_ID());
 $content = get_the_content(); ?>
 <div class="post-trait-w">
-<?php if(!isset($background)) { ?>
-<h1><?php the_title() ?></h1> <?php }
+<?php 
 $vision_church_options['webnus_sermon_featuredimage'] = isset( $vision_church_options['webnus_sermon_featuredimage'] ) ? $vision_church_options['webnus_sermon_featuredimage'] : '1';
-if(  $vision_church_options['webnus_sermon_featuredimage'] && !isset($background) ){
-get_the_image( array( 'meta_key' => array( 'Full', 'Full' ), 'size' => 'Full', 'link_to_post' => false, ) );
-}?>
-</div>
-<div <?php post_class('post'); ?>>
-<?php
 $vision_church_options['webnus_sermon_speaker'] = isset( $vision_church_options['webnus_sermon_speaker'] ) ? $vision_church_options['webnus_sermon_speaker'] : '1';
 $vision_church_options['webnus_sermon_date'] = isset( $vision_church_options['webnus_sermon_date'] ) ? $vision_church_options['webnus_sermon_date'] : '1';
 $vision_church_options['webnus_sermon_category'] = isset( $vision_church_options['webnus_sermon_category'] ) ? $vision_church_options['webnus_sermon_category'] : '1';
 $vision_church_options['webnus_sermon_comments'] = isset( $vision_church_options['webnus_sermon_comments'] ) ? $vision_church_options['webnus_sermon_comments'] : '1';
 $vision_church_options['webnus_sermon_views'] = isset( $vision_church_options['webnus_sermon_views'] ) ? $vision_church_options['webnus_sermon_views'] : '1';
-$webnus_ser_spkr =	$vision_church_options['webnus_sermon_speaker'];
-$webnus_ser_date =	$vision_church_options['webnus_sermon_date'];
-$webnus_ser_cats =	$vision_church_options['webnus_sermon_category'];
-$webnus_ser_cmnt =	$vision_church_options['webnus_sermon_comments'];
-$webnus_ser_view =	$vision_church_options['webnus_sermon_views'];
+$vision_church_options['webnus_sermon_series'] = isset( $vision_church_options['webnus_sermon_series'] ) ? $vision_church_options['webnus_sermon_series'] : '1';
+$vision_church_options['webnus_recent_sermons'] = isset( $vision_church_options['webnus_recent_sermons'] ) ? $vision_church_options['webnus_recent_sermons'] : '1';
+$webnus_ser_spkr	=	$vision_church_options['webnus_sermon_speaker'];
+$webnus_ser_date  	=	$vision_church_options['webnus_sermon_date'];
+$webnus_ser_cats	=	$vision_church_options['webnus_sermon_category'];
+$webnus_ser_cmnt	=	$vision_church_options['webnus_sermon_comments'];
+$webnus_ser_view 	=	$vision_church_options['webnus_sermon_views'];
+$webnus_ser_series 	=	$vision_church_options['webnus_sermon_series'];
+ // sermon meta
+$sermon_video			= rwmb_meta( 'vision_church_sermon_video' );
+$sermon_audio			= rwmb_meta( 'vision_church_sermon_audio' );
+$sermon_attachment		= rwmb_meta( 'vision_church_sermon_attachment' );
+
+if(  $vision_church_options['webnus_sermon_featuredimage'] && !isset($background) ){
+get_the_image( array( 'meta_key' => array( 'Full', 'Full' ), 'size' => 'Full', 'link_to_post' => false, ) );
+}
 if($webnus_ser_spkr || $webnus_ser_date || $webnus_ser_cats || $webnus_ser_cmnt || $webnus_ser_view){ ?>
 	<div class="sermon-meta clearfix">
-
+		
 		<div class="col-sm-9 wn-sermon-metaleft">
-			<?php if($webnus_ser_spkr){
-				the_terms(get_the_id(), 'sermon_speaker' ,'<h6 class="blog-author"><i class="ti-user"></i>'.esc_html__('Speaker: ','vision-church'),', ','</h6>');
-			} ?>
+			<?php
+			echo "<div class='media-links'>";
+				
+				echo '<a href="'.esc_url( $sermon_video ).'" class="video-popup button colorf readmore" target="_self" data-effect="mfp-zoom-in"><i class="pe-7s-play"></i>'.esc_html__('WATCH','vision-church').'</a>';
+				
+				echo '<a href="#w-audio-'.$post_id.'" class="audio-popup button colorf readmore " data-effect="mfp-zoom-in"><i class="pe-7s-headphones"></i>'.esc_html__('LISTEN','vision-church').'</a>
+				<div class="white-popup mfp-with-anim mfp-hide">
+					<div class="w-audio wn-audio-content" id="w-audio-'.$post_id.'">
+						'.do_shortcode('[audio mp3="'.$sermon_audio.'"][/audio]').'
+					</div>
+				</div>';
+				
+				if ( !empty( $sermon_attachment ) ) {
+						echo '<a href="'.esc_url($sermon_attachment).'" class="button colorf readmore  " target="_self"><i class="pe-7s-cloud-download"></i>'.esc_html__('DOWNLOAD','vision-church').'</a>';
+				}
 
-			<?php if($webnus_ser_date){ ?>
-			<h6 class="blog-date"><i class="ti-calendar"></i><?php the_date() ?></h6>
-			<?php } ?>
+			echo '</div>';
+			?>
+			
 		</div>
 		<div class="col-sm-3 wn-sermon-metaright">
 		<?php if($webnus_ser_cmnt){ ?>
@@ -63,29 +79,29 @@ if($webnus_ser_spkr || $webnus_ser_date || $webnus_ser_cats || $webnus_ser_cmnt 
 		</div>
 
 	</div>
-<?php } ?>
-
-<?php // sermon meta
-	$sermon_video			= rwmb_meta( 'vision_church_sermon_video' );
-	$sermon_audio			= rwmb_meta( 'vision_church_sermon_audio' );
-	$sermon_attachment		= rwmb_meta( 'vision_church_sermon_attachment' );
-		echo "<div class='media-links'>";
-			
-			echo '<a href="'.esc_url( $sermon_video ).'" class="video-popup button colorf readmore" target="_self" data-effect="mfp-zoom-in"><i class="pe-7s-play"></i>'.esc_html__('WATCH','vision-church').'</a>';
-			
-			echo '<a href="#w-audio-'.$post_id.'" class="audio-popup button colorf readmore " data-effect="mfp-zoom-in"><i class="pe-7s-headphones"></i>'.esc_html__('LISTEN','vision-church').'</a>
-			<div class="white-popup mfp-with-anim mfp-hide">
-				<div class="w-audio wn-audio-content" id="w-audio-'.$post_id.'">
-					'.do_shortcode('[audio mp3="'.$sermon_audio.'"][/audio]').'
-				</div>
-			</div>';
-			
-			if ( !empty( $sermon_attachment ) ) {
-					echo '<a href="'.esc_url($sermon_attachment).'" class="button colorf readmore  " target="_self"><i class="pe-7s-cloud-download"></i>'.esc_html__('DOWNLOAD','vision-church').'</a>';
-			}
-
-		echo '</div>';
-?>
+<?php } 
+if(!isset($background)) { ?>
+<h1 class="aligncenter"><?php the_title() ?></h1> <?php } ?>
+</div>
+<div <?php post_class('post'); ?>>
+<div class="postmetadata">
+    <ul class="sermon-metadata">
+        <?php
+        if($webnus_ser_spkr){
+			the_terms(get_the_id(), 'sermon_speaker' ,'<h6 class="sermon-metadata-detail"><i class="ti-user"></i>'.esc_html__('Speaker: ','vision-church'),', ','</h6>');
+		} 
+		if($webnus_ser_cats){
+			the_terms(get_the_id(), 'sermon_category' ,'<h6 class="sermon-metadata-detail"><i class="ti-folder"></i>'.esc_html__('Category: ','vision-church'),', ','</h6>');
+		}
+		if($webnus_ser_series){
+			the_terms(get_the_id(), 'sermon_series' ,'<h6 class="sermon-metadata-detail"><i class="ti-layers"></i>'.esc_html__('Series: ','vision-church'),', ','</h6>');
+		}
+		?>
+		<?php if($webnus_ser_date){ ?>
+		<h6 class="sermon-metadata-detail"><i class="ti-calendar"></i><?php the_date() ?></h6>
+		<?php } ?>
+    </ul>
+</div>
 
 <?php // content
 echo apply_filters('the_content',$content);
@@ -142,10 +158,39 @@ $terms = wp_get_post_terms($post->ID, "sermon_speaker");
 	}
 ?>
 
+<?php
+if ( get_the_terms(get_queried_object_id(), 'sermon_series' )  ){
+	global $post;
+	$terms = get_the_terms( $post->ID , 'sermon_series', 'string');
+	$term_ids = wp_list_pluck($terms,'term_id');
+	$second_query = new WP_Query( array(
+      'post_type' => 'sermon',
+      'tax_query' => array(
+                    array(
+                        'taxonomy' => 'sermon_series',
+                        'field' => 'id',
+                        'terms' => $term_ids,
+                        'operator'=> 'IN' //Or 'AND' or 'NOT IN'
+                     )),
+      'posts_per_page' => 3,
+      'ignore_sticky_posts' => 1,
+      'orderby' => 'rand',
+      'post__not_in'=>array($post->ID)
+	) );
+	if($second_query->have_posts()) {
+	   echo '<div class="container rec-posts"><div class="col-md-12"><h3 class="rec-title">'. esc_html__('Other Sermons In This Series ','vision-church') .'</h3></div>';
+		while ($second_query->have_posts() ) : $second_query->the_post(); ?>
+		 <div class="col-md-4 col-sm-4"><article class="rec-post">
+				<figure><?php get_the_image( array( 'meta_key' => array( 'thumbnail', 'thumbnail' ), 'size' => 'blog2_thumb' ) ); ?></figure>
+				<h5><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
+				<p><?php the_time('F d, Y') ?> </p>
+			</article></div>
+	         
+	        <?php
+		endwhile; wp_reset_query();
+	}
 
-<?php // Recent Sermons
-$vision_church_options['webnus_recent_sermons'] = isset( $vision_church_options['webnus_recent_sermons'] ) ? $vision_church_options['webnus_recent_sermons'] : '1';
-	if($vision_church_options['webnus_recent_sermons']) {
+}elseif( $vision_church_options['webnus_recent_sermons'] ) {
 	$post_ids = array();
 	$post_ids[] = $post->ID;
 	echo '<div class="container rec-posts"><div class="col-md-12"><h3 class="rec-title">'. esc_html__('Recent Sermons','vision-church') .'</h3></div>';

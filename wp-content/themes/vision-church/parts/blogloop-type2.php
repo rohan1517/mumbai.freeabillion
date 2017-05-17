@@ -14,7 +14,17 @@ $vision_church_options['vision_church_blog_readmore_text'] = isset($vision_churc
 	$meta_video = rwmb_meta( 'vision_church_featured_video_meta' );
 
 // Post Thumbnail
-if( !empty($featured_enable) && $post_format != 'aside' && $post_format != 'quote' && $post_format != 'link' && (has_post_thumbnail() || !empty($meta_video))) { ?>
+if( !empty($featured_enable) && $post_format != 'aside' && $post_format != 'quote' && $post_format != 'link' && (has_post_thumbnail() || !empty($meta_video))) { 
+    $thumbnail_url = get_the_post_thumbnail_url();
+    if( !empty( $thumbnail_url ) ) {
+        // if main class not exist get it
+        if ( !class_exists( 'Wn_Img_Maniuplate' ) ) {
+            require_once WEBNUS_CORE_DIR .'shortcodes/classes/class_webnus_manuplate.php';
+        }
+        $image = new Wn_Img_Maniuplate; // instance from settor class
+        $thumbnail_url = $image->m_image( $thumbnail_url , '420' , '330' ); // set required and get result
+    }
+    ?>
 	 <div class="col-md-5 alpha">
 		<?php if($post_format  == 'video' || $post_format == 'audio') {
 					$pattern = '\\[' . '(\\[?)' . "(video|audio)" . '(?![\\w-])' . '(' . '[^\\]\\/]*' . '(?:' . '\\/(?!\\])' . '[^\\]\\/]*' . ')*?' . ')' . '(?:' . '(\\/)' . '\\]' . '|' . '\\]' . '(?:' . '(' . '[^\\[]*+' . '(?:' . '\\[(?!\\/\\2\\])' . '[^\\[]*+' . ')*+' . ')' . '\\[\\/\\2\\]' . ')?' . ')' . '(\\]?)';
@@ -35,7 +45,8 @@ if( !empty($featured_enable) && $post_format != 'aside' && $post_format != 'quot
 					echo do_shortcode('[vc_gallery img_size= "420x330" type="flexslider_slide" interval="3" images="'.$ids.'" onclick="link_no" custom_links_target="_self"]');
 					$content = preg_replace('/'.$pattern.'/s', '', $content);}
 			} else {
-					get_the_image( array( 'meta_key' => array( 'thumbnail', 'thumbnail' ), 'size' => 'vision_church_blog2_thumb' ) ); }
+					echo "<img src=".$thumbnail_url.">";
+                     }
 		?>
 	</div>
 	<div class="col-md-7 omega">

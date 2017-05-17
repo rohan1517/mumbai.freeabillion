@@ -431,5 +431,6 @@ class CFDB7_List_Table extends WP_List_Table
         echo "<a href='".$_SERVER['REQUEST_URI']."&csv=true&nonce=".$nonce."' style='float:right; margin:0;' class='button'>";
         echo 'Export CSV';
         echo '</a>';
+        do_action('cfdb7_after_export_button');
     }
 }

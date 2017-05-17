@@ -6,7 +6,7 @@ Description: Save and manage Contact Form 7 messages. Never lose important data.
 Author: Arshid
 Author URI: http://ciphercoin.com/
 Text Domain: contact-form-cfdb7
-Version: 1.0.8
+Version: 1.1.0
 */
 
 
@@ -112,10 +112,15 @@ function cfdb7_before_send_mail( $form_tag ) {
 add_action( 'wpcf7_before_send_mail', 'cfdb7_before_send_mail' );
 
 
-add_action( 'init', 'cfdb7_admin_settings');
+add_action( 'init', 'cfdb7_init');
 
-function cfdb7_admin_settings(){
+/**
+ * CFDB7 cfdb7_init and cfdb7_admin_init 
+ * Admin setting 
+ */
+function cfdb7_init(){
     
+    do_action( 'cfdb7_init' );
 
     if( is_admin() ){ 
 
@@ -123,6 +128,8 @@ function cfdb7_admin_settings(){
         require_once 'inc/admin-subpage.php';
         require_once 'inc/admin-form-details.php';
         require_once 'inc/export-csv.php';
+
+        do_action( 'cfdb7_admin_init' );
 
         $csv = new Expoert_CSV();
         if( isset($_REQUEST['csv']) && ( $_REQUEST['csv'] == true ) && isset( $_REQUEST['nonce'] ) ) {
@@ -136,7 +143,6 @@ function cfdb7_admin_settings(){
         new Cfdb7_Wp_Main_Page();
     }
 }
-
 
 
 add_action( 'admin_notices', 'cfdb7_admin_notice' );

@@ -1229,6 +1229,14 @@
 				'on'		=> esc_html__( 'On', 'vision-church' ),
 				'off'		=> esc_html__( 'Off', 'vision-church' ),
 			),
+            array(
+                'title'     => esc_html__( 'Metadata Series', 'vision-church' ),
+                'id'        => 'webnus_sermon_series',
+                'type'      => 'switch',
+                'default'   => '1',
+                'on'        => esc_html__( 'On', 'vision-church' ),
+                'off'       => esc_html__( 'Off', 'vision-church' ),
+            ),
 			array(
 				'title'		=> esc_html__( 'Metadata Date', 'vision-church' ),
 				'id'		=> 'webnus_sermon_date',

@@ -6,7 +6,7 @@
 	/* #Blog Styles
 	================================================== */
 	
-	body.blog #wrap .container.page-content, body.single-post #wrap .container.page-content, body.archive #wrap .container.page-content, body.search #wrap .container.page-content, body.blog-pg-w #wrap .container {
+	body.single-sermon #wrap .container.page-content,body.blog #wrap .container.page-content, body.single-post #wrap .container.page-content, body.archive.category #wrap .container.page-content, body.search #wrap .container.page-content, body.blog-pg-w #wrap .container {
 		max-width: 1040px;
 	}
 	/* Sidebar
@@ -1208,7 +1208,8 @@
 		font-weight: 400;
 	}
 	.blog-post img.full, .blog-post iframe, .blog-single-post img.full, .blog-single-post iframe {
-		margin-bottom: 18px; /*width: 100%;*/
+		margin-bottom: 18px;
+		width: 100%;
 	}
 	.blog-post img {
 		background: #fff;

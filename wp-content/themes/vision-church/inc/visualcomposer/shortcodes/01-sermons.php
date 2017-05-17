@@ -28,6 +28,14 @@ vc_map( array(
 							),
 							"description" => esc_html__( "You can choose among these pre-designed types.", 'vision-church')
 						),
+						array(
+							'type'			=> 'checkbox',
+							'heading'		=> esc_html__( 'Display featured image?', 'vision-church' ),
+							'param_name'	=> 'featured',
+							'value' 		=> array( esc_html__( 'Yes', 'vision-church' ) => true ),
+							'dependency'	=> array( 'element' => 'type', 'value' => array('grid',) ),
+							'std'			=> false,
+						),
 						
 						array(
 							'type'			=> 'checkbox',

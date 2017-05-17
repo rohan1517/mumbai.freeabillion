@@ -14,16 +14,21 @@ class Cfdb7_Wp_Main_Page
      * Constructor will create the menu item
      */
     public function __construct()
-    {
-        add_action( 'admin_menu', array($this, 'admin_list_table_page' ));
+    {   
+        add_action( 'admin_menu', array($this, 'admin_list_table_page' ) );
     }
+
+
     /**
      * Menu item will allow us to load the page to display the table
      */
     public function admin_list_table_page()
-    {   
-         
+    {    
+        wp_enqueue_style( 'cfdb7-admin-style', plugin_dir_url(dirname(__FILE__)).'css/admin-style.css' );
+        
         add_menu_page( 'Contact Forms', 'Contact Forms', 'manage_options', 'cfdb7-list.php', array($this, 'list_table_page'), 'dashicons-list-view' );
+         
+         require_once 'add-ons.php';
 
     }
     /**
@@ -64,6 +69,7 @@ class Cfdb7_Wp_Main_Page
             </div>
         <?php
     }
+
 }
 // WP_List_Table is not loaded automatically so we need to load it in our application
 if( ! class_exists( 'WP_List_Table' ) ) {
